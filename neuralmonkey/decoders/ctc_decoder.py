@@ -4,9 +4,10 @@ import numpy as np
 import tensorflow as tf
 
 from neuralmonkey.dataset import Dataset
-from neuralmonkey.model.model_part import ModelPart, FeedDict
-from neuralmonkey.vocabulary import Vocabulary, END_TOKEN
 from neuralmonkey.decorators import tensor
+from neuralmonkey.model.model_part import ModelPart, FeedDict
+from neuralmonkey.tf_utils import get_variable
+from neuralmonkey.vocabulary import Vocabulary, END_TOKEN
 
 
 class CTCDecoder(ModelPart):
@@ -92,12 +93,12 @@ class CTCDecoder(ModelPart):
 
         encoder_states = self.encoder.hidden_states
 
-        weights = tf.get_variable(
+        weights = get_variable(
             name="state_to_word_W",
             shape=[encoder_states.shape[2], vocabulary_size + 1],
             initializer=tf.glorot_uniform_initializer())
 
-        biases = tf.get_variable(
+        biases = get_variable(
             name="state_to_word_b",
             shape=[vocabulary_size + 1],
             initializer=tf.zeros_initializer())
