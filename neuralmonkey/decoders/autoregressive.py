@@ -14,7 +14,7 @@ import tensorflow as tf
 from neuralmonkey.dataset import Dataset
 from neuralmonkey.decorators import tensor
 from neuralmonkey.logging import log
-from neuralmonkey.model.model_part import ModelPart, FeedDict
+from neuralmonkey.model.model_part import ModelPart, FeedDict, InitializerSpecs
 from neuralmonkey.nn.utils import dropout
 from neuralmonkey.tf_utils import get_variable
 from neuralmonkey.vocabulary import Vocabulary, START_TOKEN
@@ -62,6 +62,7 @@ DecoderFeedables = NamedTuple(
 # pylint: disable=too-many-public-methods
 class AutoregressiveDecoder(ModelPart):
 
+    # pylint: disable=too-many-arguments
     def __init__(self,
                  name: str,
                  vocabulary: Vocabulary,
@@ -69,7 +70,8 @@ class AutoregressiveDecoder(ModelPart):
                  max_output_len: int,
                  dropout_keep_prob: float = 1.0,
                  save_checkpoint: str = None,
-                 load_checkpoint: str = None) -> None:
+                 load_checkpoint: str = None,
+                 initializers: InitializerSpecs = None) -> None:
         """Initialize parameters common for all autoregressive decoders.
 
         Arguments:
@@ -80,7 +82,8 @@ class AutoregressiveDecoder(ModelPart):
             max_output_len: Maximum length of an output sequence.
             dropout_keep_prob: Probability of keeping a value during dropout.
         """
-        ModelPart.__init__(self, name, save_checkpoint, load_checkpoint)
+        ModelPart.__init__(self, name, save_checkpoint, load_checkpoint,
+                           initializers)
 
         log("Initializing decoder, name: '{}'".format(name))
 
@@ -106,6 +109,7 @@ class AutoregressiveDecoder(ModelPart):
                 tf.int32, [None, None], "train_inputs")
             self.train_mask = tf.placeholder(
                 tf.float32, [None, None], "train_mask")
+    # pylint: enable=too-many-arguments
 
     @tensor
     def batch_size(self) -> tf.Tensor:

@@ -11,6 +11,7 @@ from neuralmonkey.vocabulary import (
     Vocabulary, END_TOKEN_INDEX, PAD_TOKEN_INDEX)
 from neuralmonkey.model.sequence import EmbeddedSequence
 from neuralmonkey.model.stateful import Stateful
+from neuralmonkey.model.model_part import InitializerSpecs
 from neuralmonkey.logging import log, warn
 from neuralmonkey.nn.ortho_gru_cell import OrthoGRUCell, NematusGRUCell
 from neuralmonkey.nn.utils import dropout
@@ -67,7 +68,8 @@ class Decoder(AutoregressiveDecoder):
                  rnn_cell: str = "GRU",
                  conditional_gru: bool = False,
                  save_checkpoint: str = None,
-                 load_checkpoint: str = None) -> None:
+                 load_checkpoint: str = None,
+                 initializers: InitializerSpecs = None) -> None:
         """Create a refactored version of monster decoder.
 
         Arguments:
@@ -103,7 +105,8 @@ class Decoder(AutoregressiveDecoder):
             max_output_len=max_output_len,
             dropout_keep_prob=dropout_keep_prob,
             save_checkpoint=save_checkpoint,
-            load_checkpoint=load_checkpoint)
+            load_checkpoint=load_checkpoint,
+            initializers=initializers)
 
         self.encoders = encoders
         self.embedding_size = embedding_size

@@ -5,7 +5,7 @@ import tensorflow as tf
 
 from neuralmonkey.dataset import Dataset
 from neuralmonkey.decorators import tensor
-from neuralmonkey.model.model_part import ModelPart, FeedDict
+from neuralmonkey.model.model_part import ModelPart, FeedDict, InitializerSpecs
 from neuralmonkey.tf_utils import get_variable
 from neuralmonkey.vocabulary import Vocabulary, END_TOKEN
 
@@ -26,8 +26,10 @@ class CTCDecoder(ModelPart):
                  merge_repeated_outputs: bool = True,
                  beam_width: int = 1,
                  save_checkpoint: Optional[str] = None,
-                 load_checkpoint: Optional[str] = None) -> None:
-        ModelPart.__init__(self, name, save_checkpoint, load_checkpoint)
+                 load_checkpoint: Optional[str] = None,
+                 initializers: InitializerSpecs = None) -> None:
+        ModelPart.__init__(self, name, save_checkpoint, load_checkpoint,
+                           initializers)
 
         self.encoder = encoder
         self.vocabulary = vocabulary
