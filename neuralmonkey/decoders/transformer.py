@@ -59,8 +59,6 @@ class TransformerDecoder(AutoregressiveDecoder):
             data_id=data_id,
             max_output_len=max_output_len,
             dropout_keep_prob=dropout_keep_prob,
-            # from the "dark slide"
-            label_smoothing=0.1,
             save_checkpoint=save_checkpoint,
             load_checkpoint=load_checkpoint)
 
